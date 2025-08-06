@@ -21,10 +21,7 @@ const DashboardPage = () => {
   const [image, setImage] = useState('');
   const [slug, setSlug] = useState('');
 
-  const editor = useEditor({
-    extensions: [StarterKit],
-    content: '<p>Hello World! 🌎️</p>',
-  });
+  const [content, setContent] = useState('');
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -47,7 +44,7 @@ const DashboardPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const content = editor?.getHTML() || '';
+    const contentHtml = content;
 
     try {
       await axios.post('/api/blog', {
@@ -98,7 +95,7 @@ const DashboardPage = () => {
         </div>
         <div className="mb-4">
           <label className="block text-gray-400 mb-2">Content</label>
-          <EditorContent editor={editor} />
+          <TiptapEditor value={content} onChange={setContent} />
         </div>
         <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">
           Create Post
