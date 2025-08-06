@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from 'react';
-import { useEditor, EditorContent } from '@tiptap/react';
+import TiptapEditor from '@/components/tiptap-editor';
 import StarterKit from '@tiptap/starter-kit';
 import axios from 'axios';
 import { useSession, signOut } from 'next-auth/react';

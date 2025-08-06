@@ -17,8 +17,8 @@ export const authOptions = {
         }
         const { username, password } = credentials;
 
-        const storedUser = "riaz";
-        const storedPassword = "riaz9191";
+        const storedUser = process.env.ADMIN_USERNAME;
+        const storedPassword = process.env.ADMIN_PASSWORD;
 
         const isPasswordCorrect = await bcrypt.compare(password, await bcrypt.hash(storedPassword, 10));
 
