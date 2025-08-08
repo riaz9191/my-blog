@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -29,20 +28,22 @@ const BlogPage = () => {
   }, []);
 
   return (
-    <main className="container mx-auto p-4">
-      <h1 className="text-4xl font-bold text-center my-8">Blog</h1>
-      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {posts.map((post) => (
-          <Link key={post._id} href={`/blog/${post.slug}`}>
-            <div className="border rounded-lg overflow-hidden">
-              <img src={post.image} alt={post.title} className="w-full h-48 object-cover" />
-              <div className="p-4">
-                <h2 className="text-xl font-bold">{post.title}</h2>
+    <main className="bg-gray-900 text-white min-h-screen">
+      <div className="container mx-auto p-8">
+        <h1 className="text-5xl font-bold text-center my-8">All Posts</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {posts.map((post) => (
+            <Link key={post._id} href={`/blog/${post.slug}`}>
+              <div className="bg-gray-800 rounded-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+                <img src={post.image} alt={post.title} className="w-full h-56 object-cover" />
+                <div className="p-6">
+                  <h3 className="text-2xl font-bold">{post.title}</h3>
+                </div>
               </div>
-            </div>
-          </Link>
-        ))}
-      </section>
+            </Link>
+          ))}
+        </div>
+      </div>
     </main>
   );
 };

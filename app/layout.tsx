@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
-import { SessionProvider } from "next-auth/react";
-import Header from "@/components/sections/header";
-import Footer from "@/components/sections/footer";
+import { Providers } from "@/components/providers";
 
 export const metadata: Metadata = {
   title: "Luminous - A Personal Blog",
   description: "A personal blog by Riaz Ahammed.",
+  icons: {
+    icon: "/favicon.svg",
+  },
   authors: [
     {
       name: "Riaz Ahammed",
@@ -36,18 +36,9 @@ html {
         `}</style>
       </head>
       <body>
-        <SessionProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <Header />
-            {children}
-            <Footer />
-          </ThemeProvider>
-        </SessionProvider>
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );
