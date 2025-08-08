@@ -1,106 +1,23 @@
-
 "use client";
 
-import { useState } from 'react';
-import TiptapEditor from '@/components/tiptap-editor';
-import StarterKit from '@tiptap/starter-kit';
-import axios from 'axios';
-import { useSession, signOut } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 const DashboardPage = () => {
   const { data: session } = useSession();
-  const router = useRouter();
-
-  if (!session) {
-    router.push('/login');
-    return null;
-  }
-
-  const [title, setTitle] = useState('');
-  const [image, setImage] = useState('');
-  const [slug, setSlug] = useState('');
-
-  const [content, setContent] = useState('');
-
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.append('image', file);
-
-    try {
-      const res = await axios.post(
-        `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`,
-        formData
-      );
-      setImage(res.data.data.url);
-    } catch (error) {
-      console.error('Error uploading image:', error);
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const contentHtml = content;
-
-    try {
-      await axios.post('/api/blog', {
-        title,
-        content,
-        author: session.user?.name,
-        image,
-        slug,
-      });
-      alert('Blog post created successfully!');
-    } catch (error) {
-      console.error('Error creating blog post:', error);
-      alert('Error creating blog post');
-    }
-  };
 
   return (
-    <div className="container mx-auto p-4">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl">Dashboard</h1>
-        <button onClick={() => signOut()} className="bg-red-500 text-white p-2 rounded">
-          Sign Out
-        </button>
+    <div>
+      <h1 className="text-3xl font-bold mb-4">Welcome, {session?.user?.name}</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="bg-gray-800 p-4 rounded-lg">
+          <h2 className="text-xl font-bold">Total Posts</h2>
+          <p className="text-3xl">0</p>
+        </div>
+        <div className="bg-gray-800 p-4 rounded-lg">
+          <h2 className="text-xl font-bold">Total Views</h2>
+          <p className="text-3xl">0</p>
+        </div>
       </div>
-      <form onSubmit={handleSubmit} className="bg-gray-800 p-8 rounded-lg">
-        <div className="mb-4">
-          <label className="block text-gray-400 mb-2">Title</label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="w-full p-2 rounded bg-gray-700 text-white"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-400 mb-2">Slug</label>
-          <input
-            type="text"
-            value={slug}
-            onChange={(e) => setSlug(e.target.value)}
-            className="w-full p-2 rounded bg-gray-700 text-white"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-400 mb-2">Image</label>
-          <input type="file" onChange={handleImageUpload} className="w-full" />
-          {image && <img src={image} alt="preview" className="mt-4 w-32" />}
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-400 mb-2">Content</label>
-          <TiptapEditor value={content} onChange={setContent} />
-        </div>
-        <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">
-          Create Post
-        </button>
-      </form>
     </div>
   );
 };
