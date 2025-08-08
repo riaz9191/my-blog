@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import TiptapEditor from '@/components/tiptap-editor';
+import NovelEditor from '@/components/novel-editor';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
 
