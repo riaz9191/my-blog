@@ -1,42 +1,68 @@
-"use client";
+'use client';
 
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import TiptapToolbar from "./tiptap-toolbar";
+import { useEditor, EditorContent, BubbleMenu, FloatingMenu } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Underline from '@tiptap/extension-underline';
+import Link from '@tiptap/extension-link';
+import Image from '@tiptap/extension-image';
+import Table from '@tiptap/extension-table';
+import TableRow from '@tiptap/extension-table-row';
+import TableHeader from '@tiptap/extension-table-header';
+import TableCell from '@tiptap/extension-table-cell';
+import TiptapToolbar from './tiptap-toolbar';
 
-import Underline from "@tiptap/extension-underline";
-import Subscript from "@tiptap/extension-subscript";
-import Superscript from "@tiptap/extension-superscript";
-import TextAlign from "@tiptap/extension-text-align";
-import Highlight from "@tiptap/extension-highlight";
-import Link from "@tiptap/extension-link";
-
-const TiptapEditor = ({ value, onChange }: { value: string, onChange: (value: string) => void }) => {
+const TiptapEditor = ({ value, onChange }: { value: string; onChange: (value: string) => void }) => {
   const editor = useEditor({
     extensions: [
-      StarterKit,
-      Underline,
-      Subscript,
-      Superscript,
-      TextAlign.configure({
-        types: ["heading", "paragraph"],
+      StarterKit.configure({
+        // Disables bubble menu for default extensions
+        bubbleMenu: false,
       }),
-      Highlight,
+      Underline,
       Link.configure({
         openOnClick: false,
       }),
+      Image,
+      Table.configure({
+        resizable: true,
+      }),
+      TableRow,
+      TableHeader,
+      TableCell,
     ],
     content: value,
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
     },
-    immediatelyRender: false,
+    editorProps: {
+      attributes: {
+        class:
+          'prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-2xl mx-auto focus:outline-none p-4 border border-gray-700 rounded-b-lg bg-gray-800 text-white',
+      },
+    },
   });
 
   return (
-    <div>
+    <div className="relative">
       <TiptapToolbar editor={editor} />
-      <EditorContent editor={editor} className="prose dark:prose-invert max-w-none w-full rounded-b-lg border border-gray-700 p-4 bg-gray-800 text-white" />
+      {editor && (
+        <BubbleMenu
+          editor={editor}
+          tippyOptions={{ duration: 100 }}
+          className="bg-gray-700 text-white p-2 rounded-lg flex gap-2 shadow-lg"
+        >
+          <button onClick={() => editor.chain().focus().toggleBold().run()} className={editor.isActive('bold') ? 'bg-blue-500 p-1 rounded' : 'p-1'}>
+            Bold
+          </button>
+          <button onClick={() => editor.chain().focus().toggleItalic().run()} className={editor.isActive('italic') ? 'bg-blue-500 p-1 rounded' : 'p-1'}>
+            Italic
+          </button>
+          <button onClick={() => editor.chain().focus().toggleStrike().run()} className={editor.isActive('strike') ? 'bg-blue-500 p-1 rounded' : 'p-1'}>
+            Strike
+          </button>
+        </BubbleMenu>
+      )}
+      <EditorContent editor={editor} />
     </div>
   );
 };
